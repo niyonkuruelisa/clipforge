@@ -2,15 +2,15 @@
 
 **A Modern, Lightweight Clipboard Manager.**
 
-ClipForge is a clipboard manager built for speed and efficiency. It runs in the background, capturing everything you copy, and gives you instant access to your history with a simple shortcut. Built with **Tauri v2** and **Angular 20**.
+I built ClipForge because I wanted a clipboard manager that focuses on speed and efficiency. It runs in the background, capturing everything you copy, and gives you instant access to your history with a simple shortcut. I built it using **Tauri v2** and **Angular 20**.
 
-> **Note:** This project is still in active development. You might encounter errors or bugs. It is currently being developed and tested on **Ubuntu 25.04**, so that is the primary target platform for now.
+> **Note:** I am still actively developing this project, so you might encounter errors or bugs. I'm currently using **Ubuntu 25.04**, so that is the platform I'm targeting and testing on for now.
 
 ---
 
-## Why ClipForge?
+## Why I Built ClipForge
 
-ClipForge is designed to be fast, minimal, and keyboard-centric.
+I designed ClipForge to be fast, minimal, and keyboard-centric.
 
 ### Key Features
 
