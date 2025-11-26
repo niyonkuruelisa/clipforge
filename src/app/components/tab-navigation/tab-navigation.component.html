@@ -1,0 +1,13 @@
+<nav class="flex items-center justify-center gap-1 p-2 border-b border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+  @for (tab of tabs; track tab.id) {
+    <div
+      (click)="selectTab(tab.id)"
+      [class]="selectedTab === tab.id 
+        ? 'bg-blue-100 dark:bg-blue-900/30 ring-1 ring-blue-500/50' 
+        : 'hover:bg-gray-50 dark:hover:bg-neutral-800'"
+      class="flex items-center justify-center px-3 py-2 rounded-lg cursor-pointer transition-all duration-200"
+    >
+      <span class="material-symbols-outlined text-[20px] text-neutral-700 dark:text-neutral-300">{{ tab.iconName }}</span>
+    </div>
+  }
+</nav>

@@ -1,0 +1,23 @@
+<div class="flex-1 overflow-y-auto scrollbar-thin px-2 py-2">
+  @if (loading) {
+    <div class="flex items-center justify-center h-64">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  } @else if (items.length === 0) {
+    <div class="flex flex-col items-center justify-center h-64 text-neutral-500 dark:text-neutral-400">
+      <span class="text-6xl mb-4">📋</span>
+      <p class="text-lg font-medium">No clipboard history yet</p>
+      <p class="text-sm mt-2">Copy something to get started!</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 gap-2 max-w-md mx-auto">
+      @for (item of items; track item.id) {
+        <app-clipboard-item
+          [item]="item"
+          (copy)="onCopy($event)"
+          (pin)="onPin($event)"
+        />
+      }
+    </div>
+  }
+</div>

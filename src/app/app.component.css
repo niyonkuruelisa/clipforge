@@ -1,0 +1,6 @@
+/* App Component Styles - Windows 11 inspired */
+:host {
+  display: block;
+  height: 100vh;
+  overflow-y: auto;
+}

@@ -1,0 +1,26 @@
+<div
+  (click)="onCopy()"
+  class="p-3 rounded-md border-[0.5px] border-gray-300 dark:border-neutral-700 cursor-pointer transition-all duration-200 hover:shadow-sm bg-white dark:bg-neutral-800"
+>
+  <!-- Top row: only pin/unpin on right -->
+  <div class="flex items-center justify-end h-6">
+    <button
+      (click)="onPin($event)"
+      class="p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-700"
+      title="Pin"
+    >
+      <span class="material-symbols-outlined text-[18px]"
+        [class]="item.isPinned ? 'text-yellow-600' : 'text-neutral-500 dark:text-neutral-400'">
+        push_pin
+      </span>
+    </button>
+  </div>
+
+  <!-- Content (text only, clamp to 3 lines) -->
+  <div class="mt-1">
+    <p class="text-sm text-neutral-900 dark:text-neutral-100 line-clamp-3 break-words">
+      {{ item.preview || item.content }}
+    </p>
+  </div>
+
+</div>
