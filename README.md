@@ -1,46 +1,44 @@
-# ClipForge 📋
+# ClipForge
 
-**The Modern, Lightweight Clipboard Manager for Power Users.**
+**A Modern, Lightweight Clipboard Manager.**
 
-ClipForge is a next-generation clipboard manager built for speed and efficiency. It runs silently in the background, capturing everything you copy, and gives you instant access to your history with a simple shortcut. Built with **Tauri v2** and **Angular 20**, it combines the performance of Rust with a modern, reactive UI.
+I built ClipForge because I wanted a clipboard manager that focuses on speed and efficiency. It runs in the background, capturing everything you copy, and gives you instant access to your history with a simple shortcut. I built it using **Tauri v2** and **Angular 20**.
+
+> **Note:** I am still actively developing this project, so you might encounter errors or bugs. I'm currently using **Ubuntu 25.04**, so that is the platform I'm targeting and testing on for now.
 
 ---
 
-## 🚀 Why ClipForge?
+## Why I Built ClipForge
 
-Most clipboard managers are bloated or ugly. ClipForge is designed to feel like a native extension of your OS—fast, minimal, and keyboard-centric.
+I designed ClipForge to be fast, minimal, and keyboard-centric.
 
 ### Key Features
 
-*   **🔄 Infinite Memory (Locally):** Never lose a copied link or snippet again. ClipForge automatically saves your clipboard history.
-*   **⚡ Paste-on-Click:** Simply click any item in your history to instantly paste it into your active application. No more `Ctrl+C`, `Alt+Tab`, `Ctrl+V` gymnastics.
-*   **📌 Pin Favorites:** Keep frequently used snippets (emails, API keys, templates) at the top of your list.
-*   **⌨️ Global Shortcut:** Summon ClipForge from anywhere using `Alt + Shift + V`.
-*   **🐧 Linux Optimized:** Special care has been taken to ensure smooth operation on Linux (including Wayland support), solving common focus and window management headaches.
-*   **🔒 Privacy First:** All data is stored locally on your machine. Nothing ever leaves your device.
+*   **Infinite Memory (Locally):** Automatically saves your clipboard history.
+*   **Paste-on-Click:** Click any item in your history to paste it into your active application.
+*   **Pin Favorites:** Keep frequently used snippets at the top of your list.
+*   **Global Shortcut:** Open ClipForge from anywhere using `Alt + Shift + V`.
+*   **Linux Optimized:** Works smoothly on Linux (including Wayland).
+*   **Privacy First:** All data is stored locally on your machine.
 
 ---
 
-## 🛠️ How It Works
+## How It Works
 
-ClipForge uses a hybrid architecture to deliver high performance and low resource usage:
+### 1. The Brain (Rust)
+The backend is written in Rust using **Tauri**. It handles:
+*   **Clipboard Polling:** Monitors the system clipboard for changes.
+*   **Input Simulation:** Simulates native keystrokes for the "Click-to-Paste" feature.
+*   **Global Shortcuts:** Registers system-wide hotkeys.
 
-### 1. The Brain (Rust 🦀)
-The backend is written in Rust using **Tauri**. It handles the heavy lifting:
-*   **Clipboard Polling:** A lightweight background thread monitors the system clipboard for changes without blocking the UI.
-*   **Input Simulation:** Uses the `enigo` crate to simulate native keystrokes (`Ctrl+V` or `Cmd+V`) for the "Click-to-Paste" feature.
-*   **Global Shortcuts:** Registers system-wide hotkeys to toggle the window visibility instantly.
-
-### 2. The Face (Angular 🅰️)
-The frontend is built with **Angular 20**, utilizing the latest **Signals** architecture for granular reactivity:
-*   **Real-time Updates:** The UI updates instantly when the Rust backend detects a new clipboard item.
-*   **Modern Design:** Styled with TailwindCSS and PrimeNG for a clean, Windows 11-inspired aesthetic.
+### 2. The Face (Angular)
+The frontend is built with **Angular 20**:
+*   **Real-time Updates:** Updates instantly when new items are copied.
+*   **Modern Design:** Styled with TailwindCSS and PrimeNG.
 
 ---
 
-## 💻 Development
-
-Want to contribute or build it yourself?
+## Development
 
 ### Prerequisites
 - **Node.js** (v18+)
@@ -62,7 +60,6 @@ Want to contribute or build it yourself?
     ```
 
 3.  **Run in Development Mode**
-    This will start the Angular dev server and the Tauri window.
     ```bash
     npm run tauri dev
     ```
@@ -72,16 +69,39 @@ Want to contribute or build it yourself?
     npm run tauri build
     ```
 
+### Release Process
+
+To create a new release (e.g., `v0.1.0`):
+
+1.  **Update Version:**
+    Update the version number in `package.json` and `src-tauri/tauri.conf.json`.
+
+2.  **Commit Changes:**
+    ```bash
+    git add .
+    git commit -m "chore: bump version to 0.1.0"
+    git push
+    ```
+
+3.  **Create & Push Tag:**
+    The release workflow is triggered by git tags starting with `v`.
+    ```bash
+    git tag v0.1.0
+    git push origin v0.1.0
+    ```
+
+4.  **Monitor Build:**
+    Go to the **Actions** tab in GitHub to watch the build progress.
+
+5.  **Publish:**
+    Once the build completes, a draft release will be created in the **Releases** section with the `.deb` and `.AppImage` artifacts. Edit the release notes and publish it.
+
 ---
 
-## 🎮 Usage Guide
+## Usage Guide
 
-1.  **Copy Text:** Use your system's copy command (`Ctrl+C`) as normal. ClipForge saves it.
-2.  **Open ClipForge:** Press `Alt + Shift + V` (or launch from your app menu).
-3.  **Paste:** Click on any item in the list. The window will vanish, and the text will be pasted into your previously active window.
-4.  **Pin:** Click the "Pin" icon on an item to keep it safe from deletion when the history fills up.
-5.  **Delete:** Click the trash icon to remove sensitive items.
-
----
-
-*Built with ❤️ using Tauri & Angular.*
+1.  **Copy Text:** Use your system's copy command (`Ctrl+C`) as normal.
+2.  **Open ClipForge:** Press `Alt + Shift + V`.
+3.  **Paste:** Click on any item in the list to paste it.
+4.  **Pin:** Click the "Pin" button to save items.
+5.  **Delete:** Click the trash button to remove items.
