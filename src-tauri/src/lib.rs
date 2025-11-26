@@ -5,6 +5,8 @@ use tauri::{State, Manager, Emitter};
 use std::thread;
 use std::time::Duration;
 use chrono::Local;
+use enigo::{Enigo, Key, Keyboard, Settings, Direction};
+use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState, Code, Modifiers};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClipboardItem {
@@ -107,14 +109,71 @@ fn clear_history(state: State<ClipboardState>) -> Result<(), String> {
     Ok(())
 }
 
+// Paste content to current cursor position
+#[tauri::command]
+async fn paste_content(
+    app: tauri::AppHandle,
+    content: String,
+) -> Result<(), String> {
+    // 1. Set clipboard
+    let mut clipboard = Clipboard::new().map_err(|e| e.to_string())?;
+    clipboard.set_text(content).map_err(|e| e.to_string())?;
+
+    // 2. Hide window to return focus to previous app
+    if let Some(window) = app.get_webview_window("main") {
+        window.hide().map_err(|e| e.to_string())?;
+    }
+
+    // 3. Wait for focus switch
+    thread::sleep(Duration::from_millis(300));
+
+    // 4. Simulate Paste
+    let mut enigo = Enigo::new(&Settings::default()).map_err(|e| e.to_string())?;
+    
+    #[cfg(target_os = "macos")]
+    {
+        enigo.key(Key::Meta, Direction::Press).map_err(|e| e.to_string())?;
+        enigo.key(Key::Unicode('v'), Direction::Click).map_err(|e| e.to_string())?;
+        enigo.key(Key::Meta, Direction::Release).map_err(|e| e.to_string())?;
+    }
+
+    #[cfg(not(target_os = "macos"))]
+    {
+        enigo.key(Key::Control, Direction::Press).map_err(|e| e.to_string())?;
+        enigo.key(Key::Unicode('v'), Direction::Click).map_err(|e| e.to_string())?;
+        enigo.key(Key::Control, Direction::Release).map_err(|e| e.to_string())?;
+    }
+
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_global_shortcut::Builder::new().with_handler(|app, shortcut, event| {
+            if event.state == ShortcutState::Pressed && shortcut.matches(Modifiers::ALT | Modifiers::SHIFT, Code::KeyV) {
+                if let Some(window) = app.get_webview_window("main") {
+                    if window.is_visible().unwrap_or(false) {
+                        let _ = window.hide();
+                    } else {
+                        let _ = window.show();
+                        let _ = window.set_focus();
+                    }
+                }
+            }
+        }).build())
         .manage(ClipboardState::new())
         .setup(|app| {
             let app_handle = app.handle().clone();
             
+            // Register global shortcut (Alt+Shift+V) to toggle window
+            #[cfg(desktop)]
+            {
+                let shortcut = tauri_plugin_global_shortcut::Shortcut::new(Some(Modifiers::ALT | Modifiers::SHIFT), Code::KeyV);
+                app.handle().global_shortcut().register(shortcut)?;
+            }
+
             thread::spawn(move || {
                 let mut last_content = String::new();
                 // Initialize with current clipboard content to avoid immediate duplicate
@@ -180,6 +239,7 @@ pub fn run() {
             delete_from_history,
             toggle_pin,
             clear_history,
+            paste_content,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

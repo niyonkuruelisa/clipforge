@@ -230,6 +230,16 @@ export class ClipboardService {
     }
   }
 
+  async pasteItem(item: ClipboardItem): Promise<void> {
+    try {
+      await invoke('paste_content', { content: item.content });
+    } catch (error) {
+      console.error('Failed to paste item:', error);
+      // Fallback to copy if paste fails (e.g. enigo error)
+      await this.copyToClipboard(item);
+    }
+  }
+
   async getCurrentClipboard(): Promise<string> {
     try {
       return await invoke<string>('get_clipboard');

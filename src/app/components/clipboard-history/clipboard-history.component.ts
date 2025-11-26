@@ -17,7 +17,7 @@ export class ClipboardHistoryComponent {
   constructor(private clipboardService: ClipboardService) {}
 
   onCopy(item: ClipboardItem): void {
-    this.clipboardService.copyToClipboard(item);
+    this.clipboardService.pasteItem(item);
   }
 
   onPin(itemId: string): void {
