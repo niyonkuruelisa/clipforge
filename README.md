@@ -72,6 +72,33 @@ Want to contribute or build it yourself?
     npm run tauri build
     ```
 
+### Release Process
+
+To create a new release (e.g., `v0.1.0`):
+
+1.  **Update Version:**
+    Update the version number in `package.json` and `src-tauri/tauri.conf.json`.
+
+2.  **Commit Changes:**
+    ```bash
+    git add .
+    git commit -m "chore: bump version to 0.1.0"
+    git push
+    ```
+
+3.  **Create & Push Tag:**
+    The release workflow is triggered by git tags starting with `v`.
+    ```bash
+    git tag v0.1.0
+    git push origin v0.1.0
+    ```
+
+4.  **Monitor Build:**
+    Go to the **Actions** tab in GitHub to watch the build progress.
+
+5.  **Publish:**
+    Once the build completes, a draft release will be created in the **Releases** section with the `.deb` and `.AppImage` artifacts. Edit the release notes and publish it.
+
 ---
 
 ## 🎮 Usage Guide
