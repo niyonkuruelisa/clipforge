@@ -157,8 +157,24 @@ pub fn run() {
                     if window.is_visible().unwrap_or(false) {
                         let _ = window.hide();
                     } else {
-                        let _ = window.show();
-                        let _ = window.set_focus();
+                        let window = window.clone();
+                        thread::spawn(move || {
+                            let _ = window.show();
+                            let _ = window.unminimize();
+                            
+                            // Small delay to allow window manager to process the show command
+                            thread::sleep(Duration::from_millis(100));
+                            let _ = window.set_focus();
+                            
+                            // Linux workaround: toggle always on top to force focus
+                            #[cfg(target_os = "linux")]
+                            {
+                                thread::sleep(Duration::from_millis(50));
+                                let _ = window.set_always_on_top(true);
+                                let _ = window.set_focus();
+                                let _ = window.set_always_on_top(false);
+                            }
+                        });
                     }
                 }
             }
